@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
+from common.forms import CommentForm
 from photos.forms import PhotoCreateForm, PhotoEditForm
 from photos.models import Photo
 
@@ -22,10 +23,12 @@ def photo_add_view(request: HttpRequest) -> HttpResponse:
 def photo_details_view(request: HttpRequest, pk: int) -> HttpResponse:
     photo = Photo.objects.get(pk=pk)
     comments = photo.comment_set.all()
+    comment_form = CommentForm()
 
     context = {
         'photo': photo,
         'comments': comments,
+        'comment_form': comment_form,
     }
 
     return render(request, 'photos/photo-details-page.html', context)

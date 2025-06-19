@@ -7,5 +7,6 @@ urlpatterns = [
     path('<int:photo_id>/', include([
         path('like/', views.like, name='like'),
         path('share/', views.share, name='share'),
+        path('comment/', views.add_comment, name='add-comment'),
     ])),
 ]

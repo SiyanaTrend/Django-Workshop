@@ -3,6 +3,7 @@ from urllib.request import Request
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
+from common.forms import CommentForm
 from pets.forms import PetCreateForm, PetEditForm, PetDeleteForm
 from pets.models import Pet
 
@@ -24,10 +25,12 @@ def pet_add_view(request: HttpRequest) -> HttpResponse:
 def pet_details_view(request: HttpRequest, username: str, pet_slug: str) -> HttpResponse:
     pet = Pet.objects.get(slug=pet_slug)
     all_photos = pet.photo_set.prefetch_related('tagged_pets', 'like_set').all()
+    comment_form = CommentForm()
 
     context = {
         'pet': pet,
         'all_photos': all_photos,
+        'comment_form': comment_form,
     }
 
     return render(request, 'pets/pet-details-page.html', context)
