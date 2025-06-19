@@ -3,7 +3,7 @@ from urllib.request import Request
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
-from pets.forms import PetCreateForm, PetEditForm
+from pets.forms import PetCreateForm, PetEditForm, PetDeleteForm
 from pets.models import Pet
 
 
@@ -49,5 +49,17 @@ def pet_edit_view(request: HttpRequest, username: str, pet_slug: str) -> HttpRes
     return render(request, 'pets/pet-edit-page.html', context)
 
 def pet_delete_view(request: HttpRequest, username: str, pet_slug: str) -> HttpResponse:
-    return render(request, 'pets/pet-delete-page.html')
+    pet = Pet.objects.get(slug=pet_slug)
+    form = PetDeleteForm(instance=pet)
+
+    if request.method == 'POST':
+        pet.delete()
+        return redirect('profile-details', pk=1)
+
+    context = {
+        'pet': pet,
+        'form': form
+    }
+
+    return render(request, 'pets/pet-delete-page.html', context)
 
