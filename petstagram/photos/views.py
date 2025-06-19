@@ -11,9 +11,11 @@ def photo_add_view(request: Request) -> HttpResponse:
 
 def photo_details_view(request: Request, pk: int) -> HttpResponse:
     photo = Photo.objects.get(pk=pk)
+    comments = photo.comment_set.all()
 
     context = {
         'photo': photo,
+        'comments': comments,
     }
 
     return render(request, 'photos/photo-details-page.html', context)
