@@ -37,7 +37,7 @@
                         </a>
 
                         <!-- Link to Delete Pet Photo Page -->
-                        <a href="#">
+                        <a href="{% url 'delete-photo' pk=photo.pk %}">
                             <img class="bin-img" src="{% static '/images/icon-remove-22.jpg' %}"
                                  alt="bin button">
                         </a>
@@ -85,12 +85,14 @@
             </a>
         {% endfor %}
         <!--  -->
-    
-          <p class="pet-details">{{ photo.description }}</p>
 
-        <a href="{% url 'photo-details' pk=photo.pk %}">
-            <h4 class="details">See details</h4>
-        </a>
+        <p class="pet-details">{{ photo.description }}</p>
+    
+        {% if not editable %}
+            <a href="{% url 'photo-details' pk=photo.pk %}">
+                <h4 class="details">See details</h4>
+            </a>
+        {% endif %}
 
         <h5 class="postTime">{{ photo.date_of_publication }}</h5>
 
