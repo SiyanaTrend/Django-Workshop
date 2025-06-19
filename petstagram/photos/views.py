@@ -1,11 +1,22 @@
 from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
+from photos.forms import PhotoCreateForm
 from photos.models import Photo
 
 
 def photo_add_view(request: HttpRequest) -> HttpResponse:
-    return render(request, 'photos/photo-add-page.html')
+    form = PhotoCreateForm(request.POST or None, request.FILES or None)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('home-page')
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'photos/photo-add-page.html', context)
 
 
 def photo_details_view(request: HttpRequest, pk: int) -> HttpResponse:
