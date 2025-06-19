@@ -31,6 +31,7 @@ class PetBaseForm(forms.ModelForm):
             'personal_photo': 'Link to Image',
         }
 
+
 class PetCreateForm(PetBaseForm):
     pass
 

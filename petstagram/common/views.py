@@ -12,6 +12,7 @@ def home_page_view(request: HttpRequest) -> HttpResponse:
     context = {
         'all_photos': all_photos,
     }
+
     return render(request, 'common/home-page.html', context)
 
 
