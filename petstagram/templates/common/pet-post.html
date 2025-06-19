@@ -28,6 +28,7 @@
         </div>
         <!--  -->
     </div>
+
     <!-- Post image -->
     <div class="imgBx" id="{{ photo.pk }}">
         <img src="{{ photo.photo.url }}" alt="post" class="cover">
@@ -39,11 +40,12 @@
         <div class="actionBtns">
             <div class="left">
                 <span class="heart">
-                    <a href="#">
-                        <!-- if user has liked the photo -->
-                        <i class="fa-solid fa-heart" style="color: #ed4040;"></i>
-                        <!-- else -->
-                        <i class="fa-regular fa-heart"></i>
+                    <a href="{% url 'like' photo_id=photo.pk %}">
+                        {% if photo.like_set.all %}
+                            <i class="fa-solid fa-heart" style="color: #ed4040;"></i>
+                        {% else %}
+                            <i class="fa-regular fa-heart"></i>
+                        {% endif %}
                     </a>
                 </span>
                 <a href="share">
@@ -72,11 +74,11 @@
         </a>
 
         <h5 class="postTime">{{ photo.date_of_publication }}</h5>
-        
+
         {% if comments %}
             {% include 'common/comments.html' %}
         {% endif %}
-    
+
         <!-- add comments section -->
         <div class="addComments">
 

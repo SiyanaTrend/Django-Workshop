@@ -11,7 +11,7 @@ def pet_add_view(request: Request) -> HttpResponse:
 
 def pet_details_view(request: Request, username: str, pet_slug: str) -> HttpResponse:
     pet = Pet.objects.get(slug=pet_slug)
-    all_photos = pet.photo_set.prefetch_related('tagged_pets').all()
+    all_photos = pet.photo_set.prefetch_related('tagged_pets', 'like_set').all()
 
     context = {
         'pet': pet,
