@@ -28,6 +28,7 @@ def like(request: HttpRequest, photo_id: int) -> HttpResponse:
 
     return redirect(request.META.get('HTTP_REFERER') + f"#{photo_id}")
 
+
 def share(request: HttpRequest, photo_id: int) -> HttpResponse:
     # pip install pyperclip
     # this will only work locally

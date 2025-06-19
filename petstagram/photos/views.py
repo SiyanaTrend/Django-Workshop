@@ -7,6 +7,7 @@ from photos.models import Photo
 def photo_add_view(request: HttpRequest) -> HttpResponse:
     return render(request, 'photos/photo-add-page.html')
 
+
 def photo_details_view(request: HttpRequest, pk: int) -> HttpResponse:
     photo = Photo.objects.get(pk=pk)
     comments = photo.comment_set.all()

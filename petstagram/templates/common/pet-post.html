@@ -52,7 +52,7 @@
     <div class="imgBx" id="{{ photo.pk }}">
         <img src="{{ photo.photo.url }}" alt="post" class="cover">
     </div>
-
+    <!-- -->
     <div class="bottom">
         <!-- like and share buttons -->
         <div class="actionBtns">
@@ -78,13 +78,15 @@
 
         <!-- tagged pets -->
         {% for pet in photo.tagged_pets.all %}
-            <a href="{% url 'pet-details' username=request.user.username|default:"anonymous" pet_slug=pet.slug %}">
+            <a href="{% url 'pet-details' username=request.user.username pet_slug=pet.slug %}">
                 <p class="message">
                     <b>{{ pet.name }}</b>
                 </p>
             </a>
         {% endfor %}
         <!--  -->
+    
+          <p class="pet-details">{{ photo.description }}</p>
 
         <a href="{% url 'photo-details' pk=photo.pk %}">
             <h4 class="details">See details</h4>
