@@ -1,6 +1,4 @@
-from urllib.request import Request
-
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect, resolve_url
 from pyperclip import copy
 
@@ -8,7 +6,7 @@ from common.models import Like
 from photos.models import Photo
 
 
-def home_page_view(request: Request) -> HttpResponse:
+def home_page_view(request: HttpRequest) -> HttpResponse:
     all_photos = Photo.objects.prefetch_related('tagged_pets', 'like_set').all()
 
     context = {
@@ -17,7 +15,7 @@ def home_page_view(request: Request) -> HttpResponse:
     return render(request, 'common/home-page.html', context)
 
 
-def like(request: Request, photo_id: int) -> HttpResponse:
+def like(request: HttpRequest, photo_id: int) -> HttpResponse:
     like_object = Like.objects.filter(to_photo_id=photo_id).first()
 
     if like_object:
@@ -29,7 +27,7 @@ def like(request: Request, photo_id: int) -> HttpResponse:
 
     return redirect(request.META.get('HTTP_REFERER') + f"#{photo_id}")
 
-def share(request: Request, photo_id: int) -> HttpResponse:
+def share(request: HttpRequest, photo_id: int) -> HttpResponse:
     # pip install pyperclip
     # this will only work locally
     copy(request.META.get('HTTP_HOST') + resolve_url('photo-details', photo_id))

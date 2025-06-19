@@ -1,15 +1,26 @@
 from urllib.request import Request
 
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, HttpRequest
+from django.shortcuts import render, redirect
 
+from pets.forms import PetCreateForm
 from pets.models import Pet
 
 
-def pet_add_view(request: Request) -> HttpResponse:
-    return render(request, 'pets/pet-add-page.html')
+def pet_add_view(request: HttpRequest) -> HttpResponse:
+    form = PetCreateForm(request.POST or None)
 
-def pet_details_view(request: Request, username: str, pet_slug: str) -> HttpResponse:
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('profile-details', pk=1)
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'pets/pet-add-page.html', context)
+
+def pet_details_view(request: HttpRequest, username: str, pet_slug: str) -> HttpResponse:
     pet = Pet.objects.get(slug=pet_slug)
     all_photos = pet.photo_set.prefetch_related('tagged_pets', 'like_set').all()
 
@@ -20,9 +31,10 @@ def pet_details_view(request: Request, username: str, pet_slug: str) -> HttpResp
 
     return render(request, 'pets/pet-details-page.html', context)
 
-def pet_edit_view(request: Request, username: str, pet_slug: str) -> HttpResponse:
+def pet_edit_view(request: HttpRequest, username: str, pet_slug: str) -> HttpResponse:
+    
     return render(request, 'pets/pet-edit-page.html')
 
-def pet_delete_view(request: Request, username: str, pet_slug: str) -> HttpResponse:
+def pet_delete_view(request: HttpRequest, username: str, pet_slug: str) -> HttpResponse:
     return render(request, 'pets/pet-delete-page.html')
 
