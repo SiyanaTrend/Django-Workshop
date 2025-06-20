@@ -78,7 +78,7 @@
 
         <!-- tagged pets -->
         {% for pet in photo.tagged_pets.all %}
-            <a href="{% url 'pet-details' username=request.user.username pet_slug=pet.slug %}">
+            <a href="{% url 'pet-details' username=request.user.username|default:"anonymous" pet_slug=pet.slug %}">
                 <p class="message">
                     <b>{{ pet.name }}</b>
                 </p>
