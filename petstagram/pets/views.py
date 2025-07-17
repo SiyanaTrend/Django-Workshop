@@ -16,6 +16,13 @@ class PetAddView(CreateView):
     success_url = reverse_lazy('profile-details', kwargs={'pk': 1})
     template_name = 'pets/pet-add-page.html'
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+
+
 # def pet_add_view(request: HttpRequest) -> HttpResponse:
 #     form = PetCreateForm(request.POST or None)
 #
