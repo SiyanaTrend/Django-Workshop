@@ -15,7 +15,7 @@
                     <p>
                         <!-- Link to User Profile Details Page-->
                         <!-- User First and/or Last Name or username-->
-                        <a href="">Steven Ivanov</a>
+                        <a href="">{{ request.user.profile.full_name }}</a>
                         <!-- User Comment -->
                         - {{ comment.text }}
                     </p>

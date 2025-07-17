@@ -1,7 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
 from photos.models import Photo
 
+UserModel = get_user_model()
 
 class Comment(models.Model):
     class Meta:
@@ -17,6 +19,10 @@ class Comment(models.Model):
         to=Photo,
         on_delete=models.CASCADE,
     )
+    user = models.ForeignKey(
+        UserModel,
+        on_delete=models.CASCADE,
+    )
 
     def __str__(self) -> str:
         return self.text[:20]
@@ -24,5 +30,9 @@ class Comment(models.Model):
 class Like(models.Model):
     to_photo = models.ForeignKey(
         to=Photo,
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        UserModel,
         on_delete=models.CASCADE,
     )
