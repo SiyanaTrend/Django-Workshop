@@ -9,7 +9,7 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name='logout'),
     path('profile/<int:pk>/', include([
         path('', views.profile_details_view, name='profile-details'),
-        path('edit/', views.profile_edit_view, name='edit-profile'),
+        path('edit/', views.ProfileEditView.as_view(), name='edit-profile'),
         path('delete/', views.profile_delete_view, name='delete-profile')
     ])),
 ]
