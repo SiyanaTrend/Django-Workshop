@@ -1,5 +1,5 @@
 {% extends 'common/base.html' %}
-
+{% load placeholder_field %}
 {% block content %}
 
 <!-- Starts Main Section -->
@@ -11,14 +11,11 @@
             <h1>Petstagram</h1>
 
             <!-- Start Register Form -->
-            <form action="">
-                <input type="text" placeholder="Username">
-
-                <input type="email" placeholder="Email">
-
-                <input type="password" placeholder="Password">
-
-                <input type="password" placeholder="Repeat Password">
+            <form method="post" action="">
+                {% csrf_token %}
+                {{ form.email|placeholder:'Email' }}
+                {{ form.password1|placeholder:'Password' }}
+                {{ form.password2|placeholder:'Repeat Password'}}
 
                 <!-- Register Button -->
                 <button type="submit">Register</button>
