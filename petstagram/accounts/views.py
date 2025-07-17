@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -13,6 +13,14 @@ class RegisterView(CreateView):
     form_class = AppUserCreationForm
     template_name = 'accounts/register-page.html'
     success_url = reverse_lazy('home-page')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        if response.status_code in [301, 302]:
+            login(self.request, self.object)
+
+        return response
 
 def login_view(request: HttpRequest) -> HttpResponse:
     return render(request, 'accounts/login-page.html')
