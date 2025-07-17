@@ -22,8 +22,6 @@ class RegisterView(CreateView):
 
         return response
 
-def login_view(request: HttpRequest) -> HttpResponse:
-    return render(request, 'accounts/login-page.html')
 
 def profile_details_view(request: HttpRequest, pk: int) -> HttpResponse:
     return render(request, 'accounts/profile-details-page.html')
