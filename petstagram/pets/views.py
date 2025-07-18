@@ -15,7 +15,6 @@ from pets.models import Pet
 class PetAddView(LoginRequiredMixin, CreateView):
     model = Pet
     form_class = PetCreateForm
-    success_url = reverse_lazy('profile-details', kwargs={'pk': 1})
     template_name = 'pets/pet-add-page.html'
 
     def form_valid(self, form):
@@ -24,6 +23,8 @@ class PetAddView(LoginRequiredMixin, CreateView):
         self.object.save()
         return super().form_valid(form)
 
+    def get_success_url(self):
+        return reverse_lazy('profile-details', kwargs={'pk': self.request.user.pk})
 
 # def pet_add_view(request: HttpRequest) -> HttpResponse:
 #     form = PetCreateForm(request.POST or None)
@@ -102,7 +103,6 @@ class PetDeleteView(LoginRequiredMixin, UserIsOwnerMixin, DeleteView):
     form_class = PetDeleteForm
     template_name = 'pets/pet-delete-page.html'
     slug_url_kwarg = 'pet_slug'
-    success_url = reverse_lazy('profile-details', kwargs={'pk': 1})
 
     def get_initial(self) -> dict:
         return self.object.__dict__
@@ -111,6 +111,8 @@ class PetDeleteView(LoginRequiredMixin, UserIsOwnerMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         return self.delete(request, *args, **kwargs)
 
+    def get_success_url(self):
+        return reverse_lazy('profile-details', kwargs={'pk': self.request.user.pk})
 
     # option 2: fill the form with the data from db and delete it
     # def get_form_kwargs(self):
