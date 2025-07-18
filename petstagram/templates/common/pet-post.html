@@ -9,25 +9,23 @@
                 <div class="profilepic">
                     <div class="profile_img">
                         <div class="image">
-                            <img src="/static/images/person.png" alt="img8">
+                            {% include 'common/profile-image.html' with profile_picture=photo.user.profile.profile_picture %}
                         </div>
                     </div>
                 </div>
             </a>
             <h3>
-                <a href="profile details">
+                <a href="{% url 'profile-details' photo.user.pk %}">
                     <!-- if user has first name and last name -->
-                    Diyan Kalaydzhiev
+                    {{ photo.user.profile.full_name|default:'anonymous' }}
                     <!-- else -->
                     <!-- user username -->
                 </a>
                 <br>
                 <!-- if the photo has location -->
-                {% if photo.location %}
-                    <span>{{ photo.location }}</span>
-                {% endif %}
+                <span>{{ photo.location }}</span>
 
-                {% if editable %}
+                {% if editable and request.user.pk == photo.user.pk %}
                     <div class="edit-delete-btns">
 
                         <!-- Link to Edit Pet Photo Page -->
@@ -46,31 +44,33 @@
 
             </h3>
         </div>
-
+        <!--  -->
     </div>
     <!-- Post image -->
     <div class="imgBx" id="{{ photo.pk }}">
         <img src="{{ photo.photo.url }}" alt="post" class="cover">
     </div>
     <!-- -->
+
     <div class="bottom">
         <!-- like and share buttons -->
         <div class="actionBtns">
             <div class="left">
-                <span class="heart">
-                    <a href="{% url 'like' photo_id=photo.pk %}">
-                        {% if photo.like_set.all %}
-                            <i class="fa-solid fa-heart" style="color: #ed4040;"></i>
-                        {% else %}
-                            <i class="fa-regular fa-heart"></i>
-                        {% endif %}
-                    </a>
-                </span>
+                    <span class="heart">
+                        <a href="{% url 'like' photo_id=photo.pk %}">
+                            {% if photo.like_set.all %}
+                                <i class="fa-solid fa-heart" style="color: #ed4040;"></i>
+                            {% else %}
+                                <i class="fa-regular fa-heart"></i>
+                            {% endif %}
+                        </a>
+                    </span>
                 <a href="{% url 'share' photo_id=photo.pk %}">
                     <i class="fa-solid fa-share"></i>
                 </a>
             </div>
         </div>
+        <!-- -->
 
         <a href="#">
             <p class="likes">{{ photo.like_set.count }} likes</p>
@@ -78,15 +78,16 @@
 
         <!-- tagged pets -->
         {% for pet in photo.tagged_pets.all %}
-            <a href="{% url 'pet-details' username=request.user.username|default:"anonymous" pet_slug=pet.slug %}">
+            <a href="{% url 'pet-details' pet.user.full_name|default:'anonymous' pet.slug %}">
                 <p class="message">
                     <b>{{ pet.name }}</b>
                 </p>
             </a>
         {% endfor %}
         <!--  -->
-
+    
         <p class="pet-details">{{ photo.description }}</p>
+    
     
         {% if not editable %}
             <a href="{% url 'photo-details' pk=photo.pk %}">
@@ -97,14 +98,15 @@
         <h5 class="postTime">{{ photo.date_of_publication }}</h5>
 
         {% if comments %}
-            {% include 'common/comments.html' %}
+            {% include "common/comments.html" %}
         {% endif %}
 
         <!-- add comments section -->
         <div class="addComments">
+
             <form method="post" action="{% url 'add-comment' photo_id=photo.pk %}">
-                {% csrf_token %}
                 {{ comment_form }}
+                {% csrf_token %}
                 <button type="submit">Post</button>
             </form>
         </div>
@@ -112,4 +114,3 @@
     </div>
 </div>
 <!-- End  First Pet Photo Post -->
-

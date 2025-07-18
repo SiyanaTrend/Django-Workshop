@@ -12,7 +12,7 @@
           <div class="profile_img">
             <div class="image">
               <!-- Profile Image -->
-              <img src="/static/images/person.png" alt="img8" />
+              {% include 'common/profile-image.html' with profile_picture=object.profile_picture %}
             </div>
           </div>
           <div class="personal">

@@ -6,7 +6,7 @@ from photos.models import Photo
 class PhotoBaseForm(forms.ModelForm):
     class Meta:
         model = Photo
-        fields = '__all__'
+        exclude = ['user']
 
 
 class PhotoCreateForm(PhotoBaseForm):
@@ -16,4 +16,4 @@ class PhotoCreateForm(PhotoBaseForm):
 class PhotoEditForm(PhotoBaseForm):
     class Meta:
         model = Photo
-        exclude = ['photo']
+        exclude = ['photo', 'user']

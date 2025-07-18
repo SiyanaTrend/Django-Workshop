@@ -13,7 +13,7 @@ class HomePageView(ListView):
     model = Photo
     template_name = "common/home-page.html"
     context_object_name = "all_photos"  # rewrite, because by default Django know it as the name of the model -> photo
-    paginate_by = 1
+    paginate_by = 2
 
     def get_context_data(self, *, object_list: list = None, **kwargs) -> dict:
         kwargs.update({
