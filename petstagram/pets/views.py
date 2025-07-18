@@ -1,16 +1,18 @@
 from urllib.request import Request
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 
 from common.forms import CommentForm
+from common.mixins import UserIsOwnerMixin
 from pets.forms import PetCreateForm, PetEditForm, PetDeleteForm
 from pets.models import Pet
 
 
-class PetAddView(CreateView):
+class PetAddView(LoginRequiredMixin, CreateView):
     model = Pet
     form_class = PetCreateForm
     success_url = reverse_lazy('profile-details', kwargs={'pk': 1})
@@ -64,7 +66,7 @@ class PetDetailsView(DetailView):
 #     return render(request, 'pets/pet-details-page.html', context)
 
 
-class PetEditView(UpdateView):
+class PetEditView(LoginRequiredMixin, UserIsOwnerMixin, UpdateView):
     model = Pet
     form_class = PetEditForm
     template_name = 'pets/pet-edit-page.html'
@@ -95,7 +97,7 @@ class PetEditView(UpdateView):
 #     return render(request, 'pets/pet-edit-page.html', context)
 
 
-class PetDeleteView(DeleteView):
+class PetDeleteView(LoginRequiredMixin, UserIsOwnerMixin, DeleteView):
     model = Pet
     form_class = PetDeleteForm
     template_name = 'pets/pet-delete-page.html'
@@ -115,9 +117,6 @@ class PetDeleteView(DeleteView):
     #     kwargs = super().get_form_kwargs()
     #     kwargs.update({'data': self.get_initial()})
     #     return kwargs
-
-
-
 
 # def pet_delete_view(request: HttpRequest, username: str, pet_slug: str) -> HttpResponse:
 #     pet = Pet.objects.get(slug=pet_slug)

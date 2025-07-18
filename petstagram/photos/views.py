@@ -1,14 +1,17 @@
-from django.http import HttpResponse, HttpRequest
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse, HttpRequest, HttpResponseForbidden
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView
 
 from common.forms import CommentForm
+from common.mixins import UserIsOwnerMixin
 from photos.forms import PhotoCreateForm, PhotoEditForm
 from photos.models import Photo
 
 
-class PhotoAddView(CreateView):
+class PhotoAddView(LoginRequiredMixin, CreateView):
     model = Photo
     form_class = PhotoCreateForm
     template_name = 'photos/photo-add-page.html'
@@ -55,7 +58,7 @@ class PhotoDetailsView(DetailView):
 #     return render(request, 'photos/photo-details-page.html', context)
 
 
-class PhotoEditView(UpdateView):
+class PhotoEditView(LoginRequiredMixin, UserIsOwnerMixin, UpdateView):
     model = Photo
     form_class = PhotoEditForm
     template_name = 'photos/photo-edit-page.html'
@@ -79,7 +82,12 @@ class PhotoEditView(UpdateView):
 #     return render(request, 'photos/photo-edit-page.html', context)
 
 
+@login_required
 def photo_delete_view(request: HttpRequest, pk: int) -> HttpResponse:
     photo = Photo.objects.get(pk=pk)
-    photo.delete()
-    return redirect('home-page')
+
+    if request.user.pk == photo.user.pk:
+        photo.delete()
+        return redirect('home')
+
+    return HttpResponseForbidden()
